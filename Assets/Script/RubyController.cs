@@ -9,7 +9,7 @@ public class RubyController : MonoBehaviour
     public GameObject bulletPrefabe;
     private int curHealth;
     public int health { get { return curHealth; } }
-    private Rigidbody2D regibody;
+    private Rigidbody2D rigibody;
     private float horizontal;
     private float vertical;
     private bool isInvinciple = true;
@@ -20,7 +20,7 @@ public class RubyController : MonoBehaviour
     // 在第一次帧更新之前调用 Start
     void Start()
     {
-        regibody = GetComponent<Rigidbody2D>();
+        rigibody = GetComponent<Rigidbody2D>();
         curHealth = maxHealth;
         damageTimer = invincipleTime;
         animator = GetComponent<Animator>();
@@ -51,8 +51,19 @@ public class RubyController : MonoBehaviour
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.C)){
+        if (Input.GetKeyDown(KeyCode.C))
+        {
             launch();
+        }
+        else if (Input.GetKeyDown(KeyCode.X))
+        {
+            RaycastHit2D hit = Physics2D.Raycast(rigibody.position + Vector2.up * 0.2f, lookDirection, 1.5f, LayerMask.GetMask("NPC"));
+            if (hit.collider != null)
+            {
+                Debug.Log("Raycast has hit the object " + hit.collider.gameObject);
+                NonPlayerCharacter npcController = hit.collider.gameObject.GetComponent<NonPlayerCharacter>();
+                npcController.ShowDialogue();
+            }
         }
     }
 
@@ -61,25 +72,27 @@ public class RubyController : MonoBehaviour
         Vector2 position = transform.position;
         position.x = position.x + speed * horizontal * Time.deltaTime;
         position.y = position.y + speed * vertical * Time.deltaTime;
-        regibody.MovePosition(position);
+        rigibody.MovePosition(position);
     }
 
     public void changeHealth(int count)
     {
         if (!isInvinciple)
         {
-            if(count < 0){
+            if (count < 0)
+            {
                 animator.SetTrigger("Hit");
             }
             curHealth = Mathf.Clamp(curHealth + count, 0, maxHealth);
             isInvinciple = true;
+            UIHealthBar.instance.SetValue(curHealth / (float)maxHealth);
             Debug.Log("health: " + curHealth + "/" + maxHealth);
         }
     }
 
     void launch()
     {
-        GameObject bullet = Instantiate(bulletPrefabe, regibody.position + Vector2.up * 0.5f, Quaternion.identity);
+        GameObject bullet = Instantiate(bulletPrefabe, rigibody.position + Vector2.up * 0.5f, Quaternion.identity);
         BulletController bulletController = bullet.GetComponent<BulletController>();
         bulletController.launch(lookDirection, bulletController.shootForce);
         animator.SetTrigger("Launch");
