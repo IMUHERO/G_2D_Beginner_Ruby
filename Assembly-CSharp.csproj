@@ -38,6 +38,9 @@
   <ItemGroup>
      <Compile Include="Assets/Script/RubyController.cs" />
      <Compile Include="Assets/Script/HealthCollectible.cs" />
+     <Compile Include="Assets/Script/DamageZone.cs" />
+     <Compile Include="Assets/Script/RobotController.cs" />
+     <Compile Include="Assets/Script/BulletController.cs" />
      <None Include="Assets/2DBeginner_Third-PartyNotice.txt" />
     <Reference Include="UnityEngine">
         <HintPath>/Users/imuhero/Applications/2020.3.27f1c1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
