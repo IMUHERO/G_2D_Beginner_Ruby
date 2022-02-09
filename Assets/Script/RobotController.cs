@@ -6,6 +6,7 @@ public class RobotController : MonoBehaviour
 {
     public int speed;
     public bool isVertical;
+    public ParticleSystem smokeEffect;
     // Start is called before the first frame update
     private Rigidbody2D rigibody;
     private float Timer;
@@ -19,6 +20,7 @@ public class RobotController : MonoBehaviour
         rigibody = GetComponent<Rigidbody2D>();
         Timer = reverseTime;
         animator = GetComponent<Animator>();
+        smokeEffect.Play();
     }
 
     // Update is called once per frame
@@ -64,5 +66,6 @@ public class RobotController : MonoBehaviour
         broken = false;
         rigibody.simulated = false;
         animator.SetTrigger("Fixed");
+        smokeEffect.Stop();
     }
 }
